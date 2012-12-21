@@ -148,6 +148,10 @@ TARGET |
 target			        { return(TARGET); }
 SAMEUSER |
 sameuser			{ return(SAMEUSER);}
+MODULE_CLASS |
+module_class                    { return(MODULE_CLASS); }
+MODULE_PERM |
+module_perm                     { return(MODULE_PERM); }
 module|MODULE                   { return(MODULE); }
 require|REQUIRE                 { return(REQUIRE); }
 optional|OPTIONAL               { return(OPTIONAL); }

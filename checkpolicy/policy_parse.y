@@ -145,6 +145,8 @@ typedef int (* require_func_t)();
 %token FILESYSTEM
 %token DEFAULT_USER DEFAULT_ROLE DEFAULT_RANGE
 %token LOW_HIGH LOW HIGH
+%token MODULE_CLASS
+%token MODULE_PERM 
 
 %left OR
 %left XOR
@@ -820,6 +822,8 @@ module_policy           : module_def avrules_block
                           if (policydb_index_others(NULL, policydbp, 0)) return -1;
                         }
                         ;
+
+
 module_def              : MODULE identifier version_identifier ';'
                         { if (define_policy(pass, 1) == -1) return -1; }
                         ;
@@ -834,13 +838,35 @@ avrules_block           : avrule_decls avrule_user_defs
 avrule_decls            : avrule_decls avrule_decl
                         | avrule_decl
                         ;
-avrule_decl             : rbac_decl
+avrule_decl             : module_classes
+                        | module_perms
+                        | rbac_decl
                         | te_decl
                         | cond_stmt_def
                         | require_block
                         | optional_block
                         | ';'
                         ;
+
+module_classes          : module_class_def
+                        | module_classes module_class_def
+                        ;
+
+module_class_def        : MODULE_CLASS identifier
+			{if (define_class()) return -1;}
+
+module_perms            : module_perm_def
+                        | module_perms module_perm_def
+                        ;
+
+module_perm_def         : MODULE_PERM identifier '{' identifier_list '}'
+			{if (define_av_perms(FALSE)) return -1;}
+                        | MODULE_PERM identifier INHERITS identifier 
+			{if (define_av_perms(TRUE)) return -1;}
+                        | MODULE_PERM identifier INHERITS identifier '{' identifier_list '}'
+			{if (define_av_perms(TRUE)) return -1;}
+			;
+
 require_block           : REQUIRE '{' require_list '}'
                         ;
 require_list            : require_list require_decl
