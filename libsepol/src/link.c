@@ -259,14 +259,14 @@ static int class_copy_callback(hashtab_key_t key, hashtab_datum_t datum,
 			ret = SEPOL_ERR;
 			goto err;
 		}
-		if (scope->scope == SCOPE_DECL) {
-			/* disallow declarations in modules */
-			ERR(state->handle,
-			    "%s: Modules may not yet declare new classes.",
-			    state->cur_mod_name);
-			ret = SEPOL_ENOTSUP;
-			goto err;
-		} else {
+//		if (scope->scope == SCOPE_DECL) {
+//			/* disallow declarations in modules */
+//			ERR(state->handle,
+//			    "%s: Modules may not yet declare new classes.",
+//			    state->cur_mod_name);
+//			ret = SEPOL_ENOTSUP;
+//			goto err;
+//		} else {
 			/* It would be nice to error early here because the requirement is
 			 * not met, but we cannot because the decl might be optional (in which
 			 * case we should record the requirement so that it is just turned
@@ -304,7 +304,7 @@ static int class_copy_callback(hashtab_key_t key, hashtab_datum_t datum,
 				goto err;
 			}
 			new_class->s.value = ++(state->base->p_classes.nprim);
-		}
+		//}
 	}
 
 	state->cur->map[SYM_CLASSES][cladatum->s.value - 1] =
